@@ -10,7 +10,7 @@
         <AuthorizeView>
             <Authorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <NavLink class="nav-link" href="authentication/profile" Match="NavLinkMatch.All">
                         <span class="oi oi-person" aria-hidden="true"></span> Hello, @context.User.Identity.Name!
                     </NavLink>
                 </li>
@@ -22,12 +22,12 @@
             </Authorized>
             <NotAuthorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="authentication/profile" Match="NavLinkMatch.All">
+                    <NavLink class="nav-link" href="authentication/register" Match="NavLinkMatch.All">
                         <span class="oi oi-person" aria-hidden="true"></span> Register
                     </NavLink>
                 </li>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="authentication/logout" Match="NavLinkMatch.All">
+                    <NavLink class="nav-link" href="authentication/login" Match="NavLinkMatch.All">
                         <span class="oi oi-account-login" aria-hidden="true"></span> Log in
                     </NavLink>
                 </li>
@@ -41,11 +41,6 @@
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="AboutUs">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> About Us
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </li>
         <li class="nav-item px-3">
