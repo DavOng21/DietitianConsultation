@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DietitianConsultation.Server.Data;
 using DietitianConsultation.Shared.Domain;
+using DietitianConsultation.Server.IRepository;
 
 namespace DietitianConsultation.Server.Controllers
 {
@@ -14,25 +15,35 @@ namespace DietitianConsultation.Server.Controllers
     [ApiController]
     public class PatientsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        //refactored
+        //private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PatientsController(ApplicationDbContext context)
+        public PatientsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            //refacted
+            //_context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/Patients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
+        //Refacted
+        //public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
+        public async Task<IActionResult> GetPatients()
         {
-            return await _context.Patients.ToListAsync();
+            // return await _context.Patients.ToListAsync();
+            //refacted
+            var Patients = await _unitOfWork.Patients.GetAll();
+            return Ok(Patients);
         }
 
         // GET: api/Patients/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(int id)
         {
-            var patient = await _context.Patients.FindAsync(id);
+            // var patient = await _context.Patients.FindAsync(id);
+            var patient = await _unitOfWork.Patients.Get(q => q.Id == id);
 
             if (patient == null)
             {
@@ -52,15 +63,17 @@ namespace DietitianConsultation.Server.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(patient).State = EntityState.Modified;
+            //_context.Entry(patient).State = EntityState.Modified;
+            _unitOfWork.Patients.Update(patient);
 
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
+                await _unitOfWork.Save(HttpContext);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PatientExists(id))
+                if (id != patient.Id)
                 {
                     return NotFound();
                 }
@@ -78,8 +91,10 @@ namespace DietitianConsultation.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Patient>> PostPatient(Patient patient)
         {
-            _context.Patients.Add(patient);
-            await _context.SaveChangesAsync();
+            //_context.Patients.Add(patient);
+            //await _context.SaveChangesAsync();
+            await _unitOfWork.Patients.Insert(patient);
+            await _unitOfWork.Save(HttpContext);
 
             return CreatedAtAction("GetPatient", new { id = patient.Id }, patient);
         }
@@ -88,21 +103,26 @@ namespace DietitianConsultation.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(int id)
         {
-            var patient = await _context.Patients.FindAsync(id);
+            //var patient = await _context.Patients.FindAsync(id);
+            var patient = await _unitOfWork.Patients.Get(q => q.Id == id);
             if (patient == null)
             {
                 return NotFound();
             }
 
-            _context.Patients.Remove(patient);
-            await _context.SaveChangesAsync();
+            // _context.Patients.Remove(patient);
+            // await _context.SaveChangesAsync();
+            await _unitOfWork.Patients.Delete(id);
+            await _unitOfWork.Save(HttpContext);
 
             return NoContent();
         }
 
-        private bool PatientExists(int id)
+        private async Task<bool> PatientExists(int id)
         {
-            return _context.Patients.Any(e => e.Id == id);
+            // return _context.Patients.Any(e => e.Id == id);
+            var patient = await _unitOfWork.Patients.Get(q => q.Id == id);
+            return patient != null;
         }
     }
 }

@@ -1,0 +1,86 @@
+﻿@page "/nutritionlists/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<h3 class="card-title"> NutritionLists List</h3>
+
+@if (NutritionLists == null)
+{
+    <div class="alert alert-info">Loading NutritionLists...</div> }
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>TotalCarb</th>
+                <th>Calcium</th>
+                <th>Cholesterol</th>
+                <th>Sodium</th>
+                <th>TransFat</th>
+                <th>TotalFat</th>
+                <th>SaturatedFat</th>
+                <th>Protein</th>
+                <th>VitaminA</th>
+                <th>VitaminC</th>
+                <th>VitaminD</th>
+                <th>TotalSugar</th>
+                <th>DietaryFiber</th>
+                <th>Iron</th>
+                <th>Potassium</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var nutritionlist in NutritionLists)
+            {
+            <tr>
+                <td>@nutritionlist.TotalCarb</td>
+                <td>@nutritionlist.Calcium</td>
+                <td>@nutritionlist.Cholesterol</td>
+                <td>@nutritionlist.Sodium</td>
+                <td>@nutritionlist.TransFat</td>
+                <td>@nutritionlist.TotalFat</td>
+                <td>@nutritionlist.SaturatedFat</td>
+                <td>@nutritionlist.Protein</td>
+                <td>@nutritionlist.VitaminA</td>
+                <td>@nutritionlist.VitaminC</td>
+                <td>@nutritionlist.VitaminD</td>
+                <td>@nutritionlist.TotalSugar</td>
+                <td>@nutritionlist.DietaryFiber</td>
+                <td>@nutritionlist.Iron</td>
+                <td>@nutritionlist.Potassium</td>
+                <td>
+                    <a href="/nutritionlists/view/@nutritionlist.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+                    <a href="/nutritionlists/edit/@nutritionlist.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(nutritionlist.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>}
+@code{
+    private List<NutritionList> NutritionLists;
+
+    protected async override Task OnInitializedAsync()
+    {
+        NutritionLists = await _client.GetFromJsonAsync<List<NutritionList>>($"{Endpoints.NutritionListsEndpoint}");
+    }
+
+    async Task Delete(int nutritionlistId)
+    {
+        var nutritionlist = NutritionLists.First(q => q.Id == nutritionlistId);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {nutritionlist.Id}?");
+        if (confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.NutritionListsEndpoint}/{nutritionlistId}");
+            await OnInitializedAsync();
+        }
+    }
+
+}

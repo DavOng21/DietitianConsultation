@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DietitianConsultation.Server.Data;
 using DietitianConsultation.Shared.Domain;
+using DietitianConsultation.Server.IRepository;
 
 namespace DietitianConsultation.Server.Controllers
 {
@@ -14,25 +15,35 @@ namespace DietitianConsultation.Server.Controllers
     [ApiController]
     public class FoodsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        //refactored
+        //private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public FoodsController(ApplicationDbContext context)
+        public FoodsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            //refacted
+            //_context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/Foods
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Food>>> GetFoods()
+        //Refacted
+        //public async Task<ActionResult<IEnumerable<Food>>> GetFoods()
+        public async Task<IActionResult> GetFoods()
         {
-            return await _context.Foods.ToListAsync();
+            // return await _context.Foods.ToListAsync();
+            //refacted
+            var Foods = await _unitOfWork.Foods.GetAll();
+            return Ok(Foods);
         }
 
         // GET: api/Foods/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Food>> GetFood(int id)
         {
-            var food = await _context.Foods.FindAsync(id);
+            // var food = await _context.Foods.FindAsync(id);
+            var food = await _unitOfWork.Foods.Get(q => q.Id == id);
 
             if (food == null)
             {
@@ -52,15 +63,17 @@ namespace DietitianConsultation.Server.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(food).State = EntityState.Modified;
+            //_context.Entry(food).State = EntityState.Modified;
+            _unitOfWork.Foods.Update(food);
 
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
+                await _unitOfWork.Save(HttpContext);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FoodExists(id))
+                if (id != food.Id)
                 {
                     return NotFound();
                 }
@@ -78,8 +91,10 @@ namespace DietitianConsultation.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Food>> PostFood(Food food)
         {
-            _context.Foods.Add(food);
-            await _context.SaveChangesAsync();
+            //_context.Foods.Add(food);
+            //await _context.SaveChangesAsync();
+            await _unitOfWork.Foods.Insert(food);
+            await _unitOfWork.Save(HttpContext);
 
             return CreatedAtAction("GetFood", new { id = food.Id }, food);
         }
@@ -88,21 +103,26 @@ namespace DietitianConsultation.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFood(int id)
         {
-            var food = await _context.Foods.FindAsync(id);
+            //var food = await _context.Foods.FindAsync(id);
+            var food = await _unitOfWork.Foods.Get(q => q.Id == id);
             if (food == null)
             {
                 return NotFound();
             }
 
-            _context.Foods.Remove(food);
-            await _context.SaveChangesAsync();
+            // _context.Foods.Remove(food);
+            // await _context.SaveChangesAsync();
+            await _unitOfWork.Foods.Delete(id);
+            await _unitOfWork.Save(HttpContext);
 
             return NoContent();
         }
 
-        private bool FoodExists(int id)
+        private async Task<bool> FoodExists(int id)
         {
-            return _context.Foods.Any(e => e.Id == id);
+            // return _context.Foods.Any(e => e.Id == id);
+            var food = await _unitOfWork.Foods.Get(q => q.Id == id);
+            return food != null;
         }
     }
 }

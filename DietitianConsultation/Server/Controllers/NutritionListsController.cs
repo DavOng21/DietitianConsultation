@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DietitianConsultation.Server.Data;
 using DietitianConsultation.Shared.Domain;
+using DietitianConsultation.Server.IRepository;
 
 namespace DietitianConsultation.Server.Controllers
 {
@@ -14,53 +15,65 @@ namespace DietitianConsultation.Server.Controllers
     [ApiController]
     public class NutritionListsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        //refactored
+        //private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public NutritionListsController(ApplicationDbContext context)
+        public NutritionListsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            //refacted
+            //_context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/NutritionLists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<NutritionList>>> GetNutritionLists()
+        //Refacted
+        //public async Task<ActionResult<IEnumerable<NutritionList>>> GetNutritionLists()
+        public async Task<IActionResult> GetNutritionLists()
         {
-            return await _context.NutritionLists.ToListAsync();
+            // return await _context.NutritionLists.ToListAsync();
+            //refacted
+            var NutritionLists = await _unitOfWork.NutritionLists.GetAll(includes: q => q.Include(x => x.Food));
+            return Ok(NutritionLists);
         }
 
         // GET: api/NutritionLists/5
         [HttpGet("{id}")]
         public async Task<ActionResult<NutritionList>> GetNutritionList(int id)
         {
-            var nutritionList = await _context.NutritionLists.FindAsync(id);
+            // var nutritionlist = await _context.NutritionLists.FindAsync(id);
+            var nutritionlist = await _unitOfWork.NutritionLists.Get(q => q.Id == id);
 
-            if (nutritionList == null)
+            if (nutritionlist == null)
             {
                 return NotFound();
             }
 
-            return nutritionList;
+            return nutritionlist;
         }
 
         // PUT: api/NutritionLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNutritionList(int id, NutritionList nutritionList)
+        public async Task<IActionResult> PutNutritionList(int id, NutritionList nutritionlist)
         {
-            if (id != nutritionList.Id)
+            if (id != nutritionlist.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(nutritionList).State = EntityState.Modified;
+            //_context.Entry(nutritionlist).State = EntityState.Modified;
+            _unitOfWork.NutritionLists.Update(nutritionlist);
 
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
+                await _unitOfWork.Save(HttpContext);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NutritionListExists(id))
+                if (id != nutritionlist.Id)
                 {
                     return NotFound();
                 }
@@ -76,33 +89,40 @@ namespace DietitianConsultation.Server.Controllers
         // POST: api/NutritionLists
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<NutritionList>> PostNutritionList(NutritionList nutritionList)
+        public async Task<ActionResult<NutritionList>> PostNutritionList(NutritionList nutritionlist)
         {
-            _context.NutritionLists.Add(nutritionList);
-            await _context.SaveChangesAsync();
+            //_context.NutritionLists.Add(nutritionlist);
+            //await _context.SaveChangesAsync();
+            await _unitOfWork.NutritionLists.Insert(nutritionlist);
+            await _unitOfWork.Save(HttpContext);
 
-            return CreatedAtAction("GetNutritionList", new { id = nutritionList.Id }, nutritionList);
+            return CreatedAtAction("GetNutritionList", new { id = nutritionlist.Id }, nutritionlist);
         }
 
         // DELETE: api/NutritionLists/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNutritionList(int id)
         {
-            var nutritionList = await _context.NutritionLists.FindAsync(id);
-            if (nutritionList == null)
+            //var nutritionlist = await _context.NutritionLists.FindAsync(id);
+            var nutritionlist = await _unitOfWork.NutritionLists.Get(q => q.Id == id);
+            if (nutritionlist == null)
             {
                 return NotFound();
             }
 
-            _context.NutritionLists.Remove(nutritionList);
-            await _context.SaveChangesAsync();
+            // _context.NutritionLists.Remove(nutritionlist);
+            // await _context.SaveChangesAsync();
+            await _unitOfWork.NutritionLists.Delete(id);
+            await _unitOfWork.Save(HttpContext);
 
             return NoContent();
         }
 
-        private bool NutritionListExists(int id)
+        private async Task<bool> NutritionListExists(int id)
         {
-            return _context.NutritionLists.Any(e => e.Id == id);
+            // return _context.NutritionLists.Any(e => e.Id == id);
+            var nutritionlist = await _unitOfWork.NutritionLists.Get(q => q.Id == id);
+            return nutritionlist != null;
         }
     }
 }
