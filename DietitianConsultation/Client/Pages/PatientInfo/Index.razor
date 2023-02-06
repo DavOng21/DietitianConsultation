@@ -2,17 +2,27 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@implements IDisposable
 
 <h3 class="card-title"> PatientInfos List</h3>
+
+<a href="/patientinfos/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New PatientInfo
+</a>
+<br />
+<br />
 
 @if (PatientInfos == null)
 {
     <div class="alert alert-info">Loading PatientInfos...</div> }
 else
 {
-    <table class="table table-responsive">
+    <table class="table table-responsive" id="patientinfosTable">
         <thead>
             <tr>
+                <th>Name</th>
+                <th>DOB</th>
                 <th>BMI</th>
                 <th>MedicalHistory</th>
                 <th>ActivityRate</th>
@@ -25,25 +35,27 @@ else
         <tbody>
             @foreach (var patientinfo in PatientInfos)
             {
-                <tr>
-                    <td>@patientinfo.BMI</td>
-                    <td>@patientinfo.MedicalHistory</td>
-                    <td>@patientinfo.ActivityRate</td>
-                    <td>@patientinfo.Goals</td>
-                    <td>@patientinfo.TargetWeight</td>
-                    <td>@patientinfo.TargetHeight</td>
-                    <td>
-                        <a href="/patientinfos/view/@patientinfo.Id" class="btn btn-primary">
-                            <span class="oi oi-book"></span>
-                        </a>
-                        <a href="/patientinfos/edit/@patientinfo.Id" class="btn btn-warning">
-                            <span class="oi oi-pencil"></span>
-                        </a>
-                        <button class="btn btn-danger" @onclick="@(()=>Delete(patientinfo.Id))">
-                            <span class="oi oi-delete"></span>
-                        </button>
-                    </td>
-                </tr>
+            <tr>
+                <td>@patientinfo.Patient.Name</td>
+                <td>@patientinfo.Patient.DateOfBirth</td>
+                <td>@patientinfo.BMI</td>
+                <td>@patientinfo.MedicalHistory</td>
+                <td>@patientinfo.ActivityRate</td>
+                <td>@patientinfo.Goals</td>
+                <td>@patientinfo.TargetWeight</td>
+                <td>@patientinfo.TargetHeight</td>
+                <td>
+                    <a href="/patientinfos/view/@patientinfo.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+                    <a href="/patientinfos/edit/@patientinfo.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(patientinfo.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>
             }
         </tbody>
     </table>}
@@ -53,6 +65,16 @@ else
     protected async override Task OnInitializedAsync()
     {
         PatientInfos = await _client.GetFromJsonAsync<List<PatientInfo>>($"{Endpoints.PatientInfosEndpoint}");
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("AddDataTable", "#patientinfosTable");
+    }
+
+    public void Dispose()
+    {
+        js.InvokeVoidAsync("DataTablesDispose", "#patientinfosTable");
     }
 
     async Task Delete(int patientinfoId)

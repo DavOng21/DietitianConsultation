@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DietitianConsultation.Server.Data.Migrations
+namespace DietitianConsultation.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230116092128_DB_UpdateUnit")]
-    partial class DB_UpdateUnit
+    [Migration("20230203103331_dbfoodid")]
+    partial class dbfoodid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,7 +96,7 @@ namespace DietitianConsultation.Server.Data.Migrations
                         {
                             Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6d74caee-91d4-4d69-9260-68a9755e6c5c",
+                            ConcurrencyStamp = "cfe1caf8-2841-469e-abc6-82051ba7ad74",
                             Email = "admin@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -104,9 +104,9 @@ namespace DietitianConsultation.Server.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOfhYsYvrbDh+F37dFUVJX1K472qEbOexzgQ/8OJS1p/tSfSU8pArVye4ovDBJrR+A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPupyyGIMqRDNlwADckIGsgoYVZecMgvHi4xBbkiiKR/yOOeY1OGdLZNnUfuJ/I6/A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "53555f66-cf9a-4a9d-a806-36fb7add7827",
+                            SecurityStamp = "70585f51-9dde-432a-9695-67b0f6bc5426",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -156,8 +156,8 @@ namespace DietitianConsultation.Server.Data.Migrations
                             Id = 1,
                             Calories = 220,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 1, 16, 17, 21, 27, 511, DateTimeKind.Local).AddTicks(3113),
-                            DateUpdated = new DateTime(2023, 1, 16, 17, 21, 27, 512, DateTimeKind.Local).AddTicks(4246),
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 963, DateTimeKind.Local).AddTicks(3852),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 965, DateTimeKind.Local).AddTicks(9758),
                             Description = "Healthy food that contain vitamin and protein",
                             Name = "Chicken And Broccoli",
                             ServingSize = 1,
@@ -169,8 +169,8 @@ namespace DietitianConsultation.Server.Data.Migrations
                             Id = 2,
                             Calories = 266,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 1, 16, 17, 21, 27, 512, DateTimeKind.Local).AddTicks(5165),
-                            DateUpdated = new DateTime(2023, 1, 16, 17, 21, 27, 512, DateTimeKind.Local).AddTicks(5172),
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 966, DateTimeKind.Local).AddTicks(2068),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 966, DateTimeKind.Local).AddTicks(2083),
                             Description = "Fast Food(Unhealthy)",
                             Name = "Pizza",
                             ServingSize = 1,
@@ -203,7 +203,7 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.Property<int>("DietaryFiber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FoodId")
+                    b.Property<int>("FoodId")
                         .HasColumnType("int");
 
                     b.Property<int>("Iron")
@@ -260,10 +260,12 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Contact")
-                        .HasColumnType("int");
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -271,17 +273,20 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DateOfBirth")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -295,11 +300,11 @@ namespace DietitianConsultation.Server.Data.Migrations
                         {
                             Id = 1,
                             Address = "Tampines Street 21 blk 123",
-                            Contact = 85567722,
+                            Contact = "88833323",
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 1, 16, 17, 21, 27, 513, DateTimeKind.Local).AddTicks(7536),
-                            DateOfBirth = "22/1/2001",
-                            DateUpdated = new DateTime(2023, 1, 16, 17, 21, 27, 513, DateTimeKind.Local).AddTicks(7545),
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5270),
+                            DateOfBirth = new DateTime(2001, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5287),
                             Gender = "Male",
                             Name = "Joe",
                             UpdatedBy = "System"
@@ -308,11 +313,11 @@ namespace DietitianConsultation.Server.Data.Migrations
                         {
                             Id = 2,
                             Address = "Tampines Street 21 blk 123",
-                            Contact = 84403885,
+                            Contact = "92856722",
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2023, 1, 16, 17, 21, 27, 513, DateTimeKind.Local).AddTicks(7549),
-                            DateOfBirth = "21/7/2006",
-                            DateUpdated = new DateTime(2023, 1, 16, 17, 21, 27, 513, DateTimeKind.Local).AddTicks(7550),
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5299),
+                            DateOfBirth = new DateTime(2003, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5301),
                             Gender = "Male",
                             Name = "Steven",
                             UpdatedBy = "System"
@@ -327,6 +332,7 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ActivityRate")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BMI")
@@ -345,9 +351,10 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MedicalHistory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PatientId")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("TargetHeight")
@@ -499,14 +506,14 @@ namespace DietitianConsultation.Server.Data.Migrations
                         new
                         {
                             Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
-                            ConcurrencyStamp = "7d2aae8f-e5f4-4f4f-8e39-7e4f727ba4d7",
+                            ConcurrencyStamp = "670d046a-f865-4f1c-8a3f-5a783be14e67",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
-                            ConcurrencyStamp = "e8cf41c4-9126-466b-930e-6ab36fb57443",
+                            ConcurrencyStamp = "4863dd92-7eda-4110-bdfa-5a4aec2ff67d",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -631,7 +638,9 @@ namespace DietitianConsultation.Server.Data.Migrations
                 {
                     b.HasOne("DietitianConsultation.Shared.Domain.Food", "Food")
                         .WithMany()
-                        .HasForeignKey("FoodId");
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Food");
                 });
@@ -640,7 +649,9 @@ namespace DietitianConsultation.Server.Data.Migrations
                 {
                     b.HasOne("DietitianConsultation.Shared.Domain.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientId");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Patient");
                 });

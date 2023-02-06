@@ -24,5 +24,6 @@ namespace DietitianConsultation.Shared.Domain
         public int Iron { get; set; }
         public int Potassium { get; set; }
         public virtual Food Food { get; set; }
+        public int FoodId { get; set; }
     }
 }

@@ -1,0 +1,58 @@
+﻿@page "/foods/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager 
+<h3 class="card-title">Create Food</h3>
+<hr />
+<br /> 
+<EditForm Model="@food" OnValidSubmit="CreateFoods">
+    <DataAnnotationsValidator />
+    <ValidationSummary /> 
+    
+    <div class="form-group">
+    <label>Name: </label>
+    <div>
+     <InputText @bind-Value="food.Name" class="form-control" />
+     <ValidationMessage For="@(() => food.Name)" />
+        </div>
+        </div>     
+    
+    <div class="form-group">
+    <label>Type: </label>
+    <div>
+    <InputText @bind-Value="food.Type" class="form-control" />
+    <ValidationMessage For="@(() => food.Type)" />
+        </div>
+        </div> 
+    
+    <div class="form-group">
+    <label>Description: </label>
+    <div><InputText @bind-Value="food.Description" class="form-control" />
+    <ValidationMessage For="@(() => food.Description)" />
+        </div>
+        </div>
+    
+    <div class="form-group">
+    <label>Calories: </label>
+    <div><InputNumber @bind-Value="food.Calories" class="form-control" />
+        <ValidationMessage For="@(() => food.Calories)" />
+        </div>
+        </div> 
+    
+    <div class="form-group">
+    <label>Serving Size: </label>
+    <div><InputNumber @bind-Value="food.ServingSize" class="form-control" />
+        <ValidationMessage For="@(() => food.ServingSize)" />
+        </div>
+        </div>     
+    
+    <button type="submit" class="btn btn-success btn-block">
+        Add Food
+    </button>
+</EditForm>  
+ @code { Food food = new Food();
+    private async Task CreateFoods()
+    {
+        await _client.PostAsJsonAsync(Endpoints.FoodsEndpoint, food);
+        _navManager.NavigateTo("/foods/");
+    }
+}

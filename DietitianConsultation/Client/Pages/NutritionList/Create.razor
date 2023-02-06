@@ -1,0 +1,166 @@
+﻿@page "/nutritionlists/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager 
+
+<h3 class="card-title">Create Nutrition List</h3>
+<hr />
+<br />
+
+<EditForm Model="@nutritionlist" OnValidSubmit="CreateNutritionLists">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Food: </label>
+        <div>
+            <InputSelect @bind-Value="nutritionlist.FoodId" class="form-control">
+                <option value="">-- Select Food --</option>
+                @if (Foods != null)
+                {
+                    foreach (var food in Foods)
+                    {<option value="@food.Id">@food.Name</option>
+                }
+            }
+            </InputSelect>
+        <ValidationMessage For="@(() => nutritionlist.FoodId)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Total Carb: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.TotalCarb" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.TotalCarb)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Calcium: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.Calcium" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.Calcium)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Cholesterol: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.Cholesterol" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.Cholesterol)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Sodium: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.Sodium" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.Sodium)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Trans Fat: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.TransFat" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.TransFat)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Total Fat: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.TotalFat" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.TotalFat)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Saturated Fat: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.SaturatedFat" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.SaturatedFat)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Protein: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.Protein" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.Protein)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Vitamin A: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.VitaminA" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.VitaminA)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Vitamin C: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.VitaminC" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.VitaminC)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Vitamin D: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.VitaminD" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.VitaminD)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Total Sugar: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.TotalSugar" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.TotalSugar)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Dietary Fiber: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.DietaryFiber" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.DietaryFiber)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Iron: </label>
+        <div>
+            <InputNumber @bind-Value="nutritionlist.Iron" class="form-control" />
+            <ValidationMessage For="@(() => nutritionlist.Iron)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+    <label>Potassium: </label>
+    <div>
+        <InputNumber @bind-Value="nutritionlist.Potassium" class="form-control" />
+        <ValidationMessage For="@(() => nutritionlist.Potassium)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create Nutrition List
+    </button>
+</EditForm>
+
+    @code {
+        NutritionList nutritionlist = new NutritionList(); 
+        private IList<Food> Foods; 
+        
+        protected async override Task OnInitializedAsync()
+        {
+            Foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
+        }
+        private async Task CreateNutritionLists()
+        {
+            await _client.PostAsJsonAsync(Endpoints.NutritionListsEndpoint, nutritionlist);
+            _navManager.NavigateTo("/nutritionlists/");
+        } }

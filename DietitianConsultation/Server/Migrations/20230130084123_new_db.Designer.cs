@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DietitianConsultation.Server.Data.Migrations
+namespace DietitianConsultation.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221216111530_AddedNameToUser")]
-    partial class AddedNameToUser
+    [Migration("20230130084123_new_db")]
+    partial class new_db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -90,6 +90,280 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "ea871432-1bfa-479c-8125-cf5cc2c3cc48",
+                            Email = "admin@localhost.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@LOCALHOST.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIx7o4KXRSWiCdKhksVF6iZv3o6JzqB7c2Muh0bLJt+Fc4kLW+oCFUITsdPjBjVhLw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "a86fca18-b909-43e3-8239-53fdd6cdd026",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
+                });
+
+            modelBuilder.Entity("DietitianConsultation.Shared.Domain.Food", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Calories")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServingSize")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Foods");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Calories = 220,
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 1, 30, 16, 41, 22, 317, DateTimeKind.Local).AddTicks(9403),
+                            DateUpdated = new DateTime(2023, 1, 30, 16, 41, 22, 319, DateTimeKind.Local).AddTicks(9332),
+                            Description = "Healthy food that contain vitamin and protein",
+                            Name = "Chicken And Broccoli",
+                            ServingSize = 1,
+                            Type = "Meat and Vegetable",
+                            UpdatedBy = "System"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Calories = 266,
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 1, 30, 16, 41, 22, 320, DateTimeKind.Local).AddTicks(967),
+                            DateUpdated = new DateTime(2023, 1, 30, 16, 41, 22, 320, DateTimeKind.Local).AddTicks(977),
+                            Description = "Fast Food(Unhealthy)",
+                            Name = "Pizza",
+                            ServingSize = 1,
+                            UpdatedBy = "System"
+                        });
+                });
+
+            modelBuilder.Entity("DietitianConsultation.Shared.Domain.NutritionList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Calcium")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Cholesterol")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DietaryFiber")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FoodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Iron")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Potassium")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Protein")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SaturatedFat")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sodium")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalCarb")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalFat")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalSugar")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransFat")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VitaminA")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VitaminC")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VitaminD")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodId");
+
+                    b.ToTable("NutritionLists");
+                });
+
+            modelBuilder.Entity("DietitianConsultation.Shared.Domain.Patient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Contact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Patients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Tampines Street 21 blk 123",
+                            Contact = "88833323",
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 1, 30, 16, 41, 22, 322, DateTimeKind.Local).AddTicks(4688),
+                            DateOfBirth = new DateTime(2001, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2023, 1, 30, 16, 41, 22, 322, DateTimeKind.Local).AddTicks(4717),
+                            Gender = "Male",
+                            Name = "Joe",
+                            UpdatedBy = "System"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Tampines Street 21 blk 123",
+                            Contact = "92856722",
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 1, 30, 16, 41, 22, 322, DateTimeKind.Local).AddTicks(4724),
+                            DateOfBirth = new DateTime(2003, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2023, 1, 30, 16, 41, 22, 322, DateTimeKind.Local).AddTicks(4726),
+                            Gender = "Male",
+                            Name = "Steven",
+                            UpdatedBy = "System"
+                        });
+                });
+
+            modelBuilder.Entity("DietitianConsultation.Shared.Domain.PatientInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActivityRate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BMI")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Goals")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicalHistory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetHeight")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetWeight")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientInfos");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -220,6 +494,22 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
+                            ConcurrencyStamp = "7c8f9948-6870-4d7c-9f5f-a2d76c60d055",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
+                            ConcurrencyStamp = "15b442e4-82d0-41c4-b4e0-5a470ae90e04",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -307,6 +597,13 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            RoleId = "ad2bcf0c-20db-474f-8407-5a6b159518ba"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -328,6 +625,26 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("DietitianConsultation.Shared.Domain.NutritionList", b =>
+                {
+                    b.HasOne("DietitianConsultation.Shared.Domain.Food", "Food")
+                        .WithMany()
+                        .HasForeignKey("FoodId");
+
+                    b.Navigation("Food");
+                });
+
+            modelBuilder.Entity("DietitianConsultation.Shared.Domain.PatientInfo", b =>
+                {
+                    b.HasOne("DietitianConsultation.Shared.Domain.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

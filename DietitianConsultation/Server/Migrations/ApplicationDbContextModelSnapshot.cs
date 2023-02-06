@@ -4,16 +4,14 @@ using DietitianConsultation.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DietitianConsultation.Server.Data.Migrations
+namespace DietitianConsultation.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221217060530_AddedDefaultDataAndUser")]
-    partial class AddedDefaultDataAndUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,6 +88,26 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfe1caf8-2841-469e-abc6-82051ba7ad74",
+                            Email = "admin@localhost.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@LOCALHOST.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPupyyGIMqRDNlwADckIGsgoYVZecMgvHi4xBbkiiKR/yOOeY1OGdLZNnUfuJ/I6/A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "70585f51-9dde-432a-9695-67b0f6bc5426",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("DietitianConsultation.Shared.Domain.Food", b =>
@@ -129,6 +147,33 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Foods");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Calories = 220,
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 963, DateTimeKind.Local).AddTicks(3852),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 965, DateTimeKind.Local).AddTicks(9758),
+                            Description = "Healthy food that contain vitamin and protein",
+                            Name = "Chicken And Broccoli",
+                            ServingSize = 1,
+                            Type = "Meat and Vegetable",
+                            UpdatedBy = "System"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Calories = 266,
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 966, DateTimeKind.Local).AddTicks(2068),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 966, DateTimeKind.Local).AddTicks(2083),
+                            Description = "Fast Food(Unhealthy)",
+                            Name = "Pizza",
+                            ServingSize = 1,
+                            UpdatedBy = "System"
+                        });
                 });
 
             modelBuilder.Entity("DietitianConsultation.Shared.Domain.NutritionList", b =>
@@ -156,7 +201,7 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.Property<int>("DietaryFiber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FoodId")
+                    b.Property<int>("FoodId")
                         .HasColumnType("int");
 
                     b.Property<int>("Iron")
@@ -213,10 +258,12 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Contact")
-                        .HasColumnType("int");
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -224,17 +271,20 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -242,6 +292,34 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Patients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Tampines Street 21 blk 123",
+                            Contact = "88833323",
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5270),
+                            DateOfBirth = new DateTime(2001, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5287),
+                            Gender = "Male",
+                            Name = "Joe",
+                            UpdatedBy = "System"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Tampines Street 21 blk 123",
+                            Contact = "92856722",
+                            CreatedBy = "System",
+                            DateCreated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5299),
+                            DateOfBirth = new DateTime(2003, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2023, 2, 3, 18, 33, 30, 969, DateTimeKind.Local).AddTicks(5301),
+                            Gender = "Male",
+                            Name = "Steven",
+                            UpdatedBy = "System"
+                        });
                 });
 
             modelBuilder.Entity("DietitianConsultation.Shared.Domain.PatientInfo", b =>
@@ -252,6 +330,7 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ActivityRate")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BMI")
@@ -270,9 +349,10 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MedicalHistory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PatientId")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("TargetHeight")
@@ -419,6 +499,22 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
+                            ConcurrencyStamp = "670d046a-f865-4f1c-8a3f-5a783be14e67",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
+                            ConcurrencyStamp = "4863dd92-7eda-4110-bdfa-5a4aec2ff67d",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -506,6 +602,13 @@ namespace DietitianConsultation.Server.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            RoleId = "ad2bcf0c-20db-474f-8407-5a6b159518ba"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -532,8 +635,10 @@ namespace DietitianConsultation.Server.Data.Migrations
             modelBuilder.Entity("DietitianConsultation.Shared.Domain.NutritionList", b =>
                 {
                     b.HasOne("DietitianConsultation.Shared.Domain.Food", "Food")
-                        .WithMany("NutritionLists")
-                        .HasForeignKey("FoodId");
+                        .WithMany()
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Food");
                 });
@@ -541,8 +646,10 @@ namespace DietitianConsultation.Server.Data.Migrations
             modelBuilder.Entity("DietitianConsultation.Shared.Domain.PatientInfo", b =>
                 {
                     b.HasOne("DietitianConsultation.Shared.Domain.Patient", "Patient")
-                        .WithMany("PatientInfos")
-                        .HasForeignKey("PatientId");
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Patient");
                 });
@@ -596,16 +703,6 @@ namespace DietitianConsultation.Server.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DietitianConsultation.Shared.Domain.Food", b =>
-                {
-                    b.Navigation("NutritionLists");
-                });
-
-            modelBuilder.Entity("DietitianConsultation.Shared.Domain.Patient", b =>
-                {
-                    b.Navigation("PatientInfos");
                 });
 #pragma warning restore 612, 618
         }

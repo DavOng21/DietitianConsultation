@@ -1,0 +1,24 @@
+﻿@page "/nutritionlists/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager 
+
+<h3>Edit Nutrition Lists</h3> 
+
+<FormComponent ButtonText="Update" OnValidSubmit="EditNutritionList" nutritionlist="nutritionlist" />
+
+@code {
+        [Parameter] public int id { get; set; }
+        NutritionList nutritionlist = new NutritionList();
+
+
+        protected async override Task OnParametersSetAsync()
+    {
+        nutritionlist = await _client.GetFromJsonAsync<NutritionList>($"{Endpoints.NutritionListsEndpoint}/{id}");
+    }
+
+    async Task EditNutritionList()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.NutritionListsEndpoint}/{id}", nutritionlist);
+        _navManager.NavigateTo("/nutritionlists/");
+    }
+}

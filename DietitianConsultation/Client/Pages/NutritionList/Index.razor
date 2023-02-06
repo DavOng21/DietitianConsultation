@@ -2,17 +2,26 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@implements IDisposable
 
 <h3 class="card-title"> NutritionLists List</h3>
+
+<a href="/nutritionlists/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Nutrition List
+</a>
+<br />
+<br />
 
 @if (NutritionLists == null)
 {
     <div class="alert alert-info">Loading NutritionLists...</div> }
 else
 {
-    <table class="table table-responsive">
+    <table class="table table-responsive" id="nutritionlistsTable">
         <thead>
             <tr>
+                <th>Food</th>
                 <th>TotalCarb</th>
                 <th>Calcium</th>
                 <th>Cholesterol</th>
@@ -34,6 +43,7 @@ else
             @foreach (var nutritionlist in NutritionLists)
             {
             <tr>
+                <td>@nutritionlist.Food.Name</td>
                 <td>@nutritionlist.TotalCarb</td>
                 <td>@nutritionlist.Calcium</td>
                 <td>@nutritionlist.Cholesterol</td>
@@ -70,6 +80,16 @@ else
     protected async override Task OnInitializedAsync()
     {
         NutritionLists = await _client.GetFromJsonAsync<List<NutritionList>>($"{Endpoints.NutritionListsEndpoint}");
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("AddDataTable", "#nutritionlistsTable");
+    }
+
+    public void Dispose()
+    {
+        js.InvokeVoidAsync("DataTablesDispose", "#nutritionlistsTable");
     }
 
     async Task Delete(int nutritionlistId)

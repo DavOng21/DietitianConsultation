@@ -2,15 +2,23 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@implements IDisposable
 
 <h3 class="card-title"> Patients List</h3>
+
+<a href="/patients/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Patient
+</a>
+<br />
+<br />
 
 @if (Patients == null)
 {
     <div class="alert alert-info">Loading Patients...</div> }
 else
 {
-    <table class="table table-responsive">
+    <table class="table table-responsive" id="patientsTable">
         <thead>
             <tr>
                 <th>Name</th>
@@ -51,6 +59,16 @@ else
     protected async override Task OnInitializedAsync()
     {
         Patients = await _client.GetFromJsonAsync<List<Patient>>($"{Endpoints.PatientsEndpoint}");
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("AddDataTable", "#patientsTable");
+    }
+
+    public void Dispose()
+    {
+        js.InvokeVoidAsync("DataTablesDispose", "#patientsTable");
     }
 
     async Task Delete(int patientId)

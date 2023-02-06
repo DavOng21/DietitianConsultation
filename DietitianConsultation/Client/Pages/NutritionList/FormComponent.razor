@@ -1,0 +1,198 @@
+﻿@inject HttpClient _client
+
+<EditForm Model="@nutritionlist" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Food: </label>
+            <div>
+                <InputSelect @bind-Value="nutritionlist.FoodId" class="form-control">
+                    <option value="">-- Select Food --</option>
+                    @if (Foods != null)
+                    {
+                        foreach (var food in Foods)
+                        {
+                            <option value="@food.Id">@food.Name</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => nutritionlist.FoodId)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Total Carb: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.TotalCarb" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.TotalCarb)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Calcium: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.Calcium" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.Calcium)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Cholesterol: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.Cholesterol" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.Cholesterol)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Sodium: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.Sodium" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.Sodium)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Trans Fat: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.TransFat" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.TransFat)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Total Fat: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.TotalFat" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.TotalFat)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Saturated Fat: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.SaturatedFat" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.SaturatedFat)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Protein: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.Protein" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.Protein)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Vitamin A: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.VitaminA" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.VitaminA)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Vitamin C: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.VitaminC" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.VitaminC)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Vitamin D: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.VitaminD" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.VitaminD)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Total Sugar: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.TotalSugar" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.TotalSugar)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Dietary Fiber: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.DietaryFiber" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.DietaryFiber)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Iron: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.Iron" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.Iron)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Potassium: </label>
+            <div>
+                <InputNumber @bind-Value="nutritionlist.Potassium" class="form-control" />
+                <ValidationMessage For="@(() => nutritionlist.Potassium)" />
+            </div>
+        </div>
+    </fieldset>
+
+    @if (!Disabled)
+    {
+        <button type="submit" class="btn btn-success btn-block">
+            @ButtonText
+        </button>
+    }
+    <BackToList Target="nutritionlists" />
+</EditForm>
+
+@code {
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public NutritionList nutritionlist { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    private IList<Food> Foods;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
+    }
+}
+

@@ -19,8 +19,8 @@ namespace DietitianConsultation.Server.Configurations.Entities
             Name = "Joe",
             Gender = "Male",
             Address = "Tampines Street 21 blk 123",
-            DateOfBirth ="22/1/2001",
-            Contact = 85567722,
+            DateOfBirth= new DateTime(2001, 3, 23),
+            Contact = "88833323",
             DateCreated = DateTime.Now,
             DateUpdated = DateTime.Now,
             CreatedBy = "System",
@@ -32,14 +32,14 @@ namespace DietitianConsultation.Server.Configurations.Entities
             Name = "Steven",
             Gender = "Male",
             Address = "Tampines Street 21 blk 123",
-            DateOfBirth = "21/7/2006",
-            Contact = 84403885,
+            DateOfBirth = new DateTime(2003, 6, 15),
+            Contact = "92856722",
             DateCreated = DateTime.Now,
             DateUpdated = DateTime.Now,
             CreatedBy = "System",
             UpdatedBy = "System"
         }
-);
+) ;
          
 
 

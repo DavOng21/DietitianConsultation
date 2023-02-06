@@ -1,0 +1,64 @@
+﻿@page "/patients/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Patient</h3>
+<hr />
+<br />
+
+<EditForm Model="@patient" OnValidSubmit="CreatePatient">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label> Name: </label>
+        <div>
+            <InputText @bind-Value="@patient.Name" class="form-control" />
+            <ValidationMessage For="@(() => patient.Name)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Gender: </label>
+        <div>
+            <InputText @bind-Value="@patient.Gender" class="form-control" />
+            <ValidationMessage For="@(() => patient.Gender)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Address: </label>
+        <div>
+            <InputText @bind-Value="@patient.Address" class="form-control" />
+            <ValidationMessage For="@(() => patient.Address)" />
+        </div>
+    </div>
+
+<div class="form-group">
+    <label>Date Of Birth: </label>
+    <div>
+        <InputDate @bind-Value="@patient.DateOfBirth" class="form-control" />
+        <ValidationMessage For="@(() => patient.DateOfBirth)" />
+    </div>
+</div>
+    
+                <div class="form-group">
+                    <label>Contact: </label>
+                    <div>
+                        <InputText @bind-Value="@patient.Contact" class="form-control" />
+                        <ValidationMessage For="@(() => patient.Contact)" />
+                    </div>
+                </div>
+
+                                <button type="submit" class="btn btn-success btn-block">
+                                    Create Patient
+                                </button>
+                                            </EditForm>
+
+@code { Patient patient = new Patient();
+
+            private async Task CreatePatient()
+            {
+                await _client.PostAsJsonAsync(Endpoints.PatientsEndpoint, patient);
+                _navManager.NavigateTo("/patients/");
+            } }

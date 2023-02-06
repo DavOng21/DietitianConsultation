@@ -1,0 +1,113 @@
+﻿@page "/patientinfos/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New PatientInfo</h3>
+<hr />
+<br />
+
+<EditForm Model="@patientinfo" OnValidSubmit="CreatePatientInfo">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+        <div class="form-group">
+            <label>Patient Name: </label>
+            <div>
+                <InputSelect @bind-Value="patientinfo.PatientId" class="form-control">
+                    <option value="">-- Select Patient --</option>
+                    @if (Patients != null)
+                    {
+                        foreach (var patient in Patients)
+                        {
+                <option value="@patient.Id">@patient.Name</option>}
+                        }
+                </InputSelect>
+                <ValidationMessage For="@(() => patientinfo.PatientId)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Patient DOB: </label>
+            <div>
+                <InputSelect @bind-Value="patientinfo.PatientId" class="form-control">
+                    <option value="">-- Select Patient --</option>
+                    @if (Patients != null)
+                    {
+                        foreach (var patient in Patients)
+                        {
+        <option value="@patient.Id">@patient.DateOfBirth</option>}
+}
+                </InputSelect>
+                <ValidationMessage For="@(() => patientinfo.PatientId)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label> BMI: </label>
+            <div>
+                <InputNumber @bind-Value="@patientinfo.BMI" class="form-control" />
+                <ValidationMessage For="@(() => patientinfo.BMI)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>MedicalHistory: </label>
+            <div>
+                <InputText @bind-Value="@patientinfo.MedicalHistory" class="form-control" />
+                <ValidationMessage For="@(() => patientinfo.MedicalHistory)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>ActivityRate: </label>
+            <div>
+                <InputText @bind-Value="@patientinfo.ActivityRate" class="form-control" />
+                <ValidationMessage For="@(() => patientinfo.ActivityRate)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Goals: </label>
+            <div>
+                <InputText @bind-Value="@patientinfo.Goals" class="form-control" />
+                <ValidationMessage For="@(() => patientinfo.Goals)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>TargetWeight: </label>
+            <div>
+                <InputNumber @bind-Value="@patientinfo.TargetWeight" class="form-control" />
+                <ValidationMessage For="@(() => patientinfo.TargetWeight)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>TargetHeight: </label>
+            <div>
+                <InputNumber @bind-Value="@patientinfo.TargetHeight" class="form-control" />
+                <ValidationMessage For="@(() => patientinfo.TargetHeight)" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block">
+            Create PatientInfo
+        </button>
+
+
+    </EditForm>
+
+    @code { PatientInfo patientinfo = new PatientInfo();
+
+        private IList<Patient> Patients;
+
+        protected async override Task OnInitializedAsync()
+        {
+            Patients = await _client.GetFromJsonAsync<List<Patient>>($"{Endpoints.PatientsEndpoint}");
+        }
+
+        private async Task CreatePatientInfo()
+        {
+            await _client.PostAsJsonAsync(Endpoints.PatientInfosEndpoint, patientinfo);
+            _navManager.NavigateTo("/patientinfos/");
+        } }
